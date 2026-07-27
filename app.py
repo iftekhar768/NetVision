@@ -64,6 +64,26 @@ def scan():
 
     return redirect("/devices")
 
+@app.route("/edit-device/<int:id>", methods=["GET", "POST"])
+def edit_device(id):
+
+    device = Device.query.get_or_404(id)
+
+    if request.method == "POST":
+
+        device.name = request.form["name"]
+        device.ip_address = request.form["ip_address"]
+        device.location = request.form["location"]
+
+        db.session.commit()
+
+        return redirect("/devices")
+
+    return render_template(
+        "edit_device.html",
+        device=device
+    )
+
 with app.app_context():
     db.create_all()
 

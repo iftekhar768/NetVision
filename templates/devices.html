@@ -23,6 +23,7 @@
             <th>IP Address</th>
             <th>Location</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
 
@@ -57,6 +58,14 @@
                     </span>
 
                 {% endif %}
+            </td>
+            <td>
+
+                            <a href="/edit-device/{{ device.id }}"
+                class="btn btn-warning btn-sm">
+                    ✏️ Edit
+                            </a>
+
             </td>
 
         </tr>
