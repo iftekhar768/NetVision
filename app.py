@@ -76,6 +76,20 @@ def scan():
     scan_all_devices()
 
     return redirect("/devices")
+def scan_all_devices():
+    devices = Device.query.all()
+
+    for device in devices:
+        old_status = device.status
+        new_status = check_device(device.ip_address)
+
+        device.status = new_status
+
+        print(f"{device.name}: {old_status} -> {new_status}")
+
+    db.session.commit()
+
+    print("Network Scan Completed")
 
 @app.route("/edit-device/<int:id>", methods=["GET", "POST"])
 def edit_device(id):
