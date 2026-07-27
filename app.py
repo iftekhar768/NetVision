@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect
 from config import Config
 from models.device import db, Device
 from monitoring.ping_monitor import check_device
-
+from sqlalchemy import or_
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -27,7 +27,19 @@ def home():
 
 @app.route("/devices")
 def devices():
-    all_devices = Device.query.all()
+
+    search = request.args.get("search")
+
+    if search:
+        all_devices = Device.query.filter(
+            or_(
+                Device.name.ilike(f"%{search}%"),
+                Device.ip_address.ilike(f"%{search}%")
+            )
+        ).all()
+    else:
+        all_devices = Device.query.all()
+
     return render_template(
         "devices.html",
         devices=all_devices
