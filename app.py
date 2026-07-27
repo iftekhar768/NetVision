@@ -84,6 +84,16 @@ def edit_device(id):
         device=device
     )
 
+@app.route("/delete-device/<int:id>")
+def delete_device(id):
+
+    device = Device.query.get_or_404(id)
+
+    db.session.delete(device)
+    db.session.commit()
+
+    return redirect("/devices")
+
 with app.app_context():
     db.create_all()
 

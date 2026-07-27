@@ -61,12 +61,19 @@
             </td>
             <td>
 
-                            <a href="/edit-device/{{ device.id }}"
+                <a href="/edit-device/{{ device.id }}"
                 class="btn btn-warning btn-sm">
                     ✏️ Edit
-                            </a>
+                </a>
+
+                <a href="/delete-device/{{ device.id }}"
+                class="btn btn-danger btn-sm"
+                onclick="return confirm('Are you sure you want to delete this device?')">
+                    🗑 Delete
+                </a>
 
             </td>
+            
 
         </tr>
 
