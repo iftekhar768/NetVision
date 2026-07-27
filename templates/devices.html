@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Network Devices</h2>
+
+<hr>
+
+<a href="/add-device" class="btn btn-success mb-3">
+    + Add Device
+</a>
+
+<table class="table table-bordered table-striped">
+
+    <thead class="table-dark">
+
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>IP Address</th>
+            <th>Location</th>
+            <th>Status</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for device in devices %}
+
+        <tr>
+
+            <td>{{ device.id }}</td>
+            <td>{{ device.name }}</td>
+            <td>{{ device.ip_address }}</td>
+            <td>{{ device.location }}</td>
+            <td>{{ device.status }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
