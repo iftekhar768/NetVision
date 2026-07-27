@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from config import Config
 from models.device import db, Device
+from monitoring.ping_monitor import check_device
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -38,6 +39,19 @@ def add_device():
         return redirect("/devices")
 
     return render_template("add_device.html")
+
+@app.route("/scan")
+def scan():
+
+    devices = Device.query.all()
+
+    for device in devices:
+
+        device.status = check_device(device.ip_address)
+
+    db.session.commit()
+
+    return redirect("/devices")
 
 with app.app_context():
     db.create_all()
