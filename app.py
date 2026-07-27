@@ -11,8 +11,19 @@ db.init_app(app)
 
 @app.route("/")
 def home():
-    return render_template("dashboard.html")
 
+    total = Device.query.count()
+
+    online = Device.query.filter_by(status="Online").count()
+
+    offline = Device.query.filter_by(status="Offline").count()
+
+    return render_template(
+        "dashboard.html",
+        total=total,
+        online=online,
+        offline=offline
+    )
 
 @app.route("/devices")
 def devices():
