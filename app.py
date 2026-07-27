@@ -3,10 +3,17 @@ from config import Config
 from models.device import db, Device
 from monitoring.ping_monitor import check_device
 from sqlalchemy import or_
+from monitoring.scheduler import scheduler
+from monitoring.ping_monitor import scan_all_devices
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
+
+def scheduled_scan():
+    with app.app_context():
+        scan_all_devices()
 
 
 @app.route("/")
@@ -66,13 +73,7 @@ def add_device():
 @app.route("/scan")
 def scan():
 
-    devices = Device.query.all()
-
-    for device in devices:
-
-        device.status = check_device(device.ip_address)
-
-    db.session.commit()
+    scan_all_devices()
 
     return redirect("/devices")
 
@@ -108,7 +109,16 @@ def delete_device(id):
 
 with app.app_context():
     db.create_all()
+    scheduler.start()
 
+scheduler.add_job(
+    scheduled_scan,
+    "interval",
+    seconds=30
+)
+
+if not scheduler.running:
+    scheduler.start()
 
 if __name__ == "__main__":
     app.run(debug=True)
