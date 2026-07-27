@@ -38,7 +38,13 @@
             <td>{{ device.name }}</td>
             <td>{{ device.ip_address }}</td>
             <td>{{ device.location }}</td>
-            <td>{{ device.status }}</td>
+            <td>{% if device.status == "Online" %}
+        <span class="badge bg-success">Online</span>
+    {% elif device.status == "Offline" %}
+        <span class="badge bg-danger">Offline</span>
+    {% else %}
+        <span class="badge bg-secondary">Unknown</span>
+    {% endif %}</td>
 
         </tr>
 
